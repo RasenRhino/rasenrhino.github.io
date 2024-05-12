@@ -9,7 +9,7 @@ layout: home
 
 ## Hello there! 
 
-I'm Ridham Bhagat, a computer engineering student. You can Find my resume [here](/assets/ridham_bhagat_cv.pdf). 
+I'm Ridham Bhagat, a computer engineering student. You can find my resume [here](/assets/ridham_bhagat_cv.pdf). 
 
 **My interests and fancies:**
 
@@ -28,7 +28,7 @@ I'm Ridham Bhagat, a computer engineering student. You can Find my resume [here]
 * Currently working on getting better at playing CTFs
 
 **What you can expect over here**
-* [Posts](/posts/) have my regular walkthroughs (just like any other blog)
+* [Posts](/posts/) have my regular stuff I am looking at. 
 * In [Tinkering](/tinkering/), I plan to document things that I do when I go into a rabbit whole into some weird topic (like similarity in the outcomes of a Galton Board and Double Slit Experiment) (I am still trying to justify this section, it is a WIP)
 
 
