@@ -1,6 +1,9 @@
 i am confused about this line in portswigger, "cors does not prevent csrf". need to dig a bit deeper. 
 so lets talk about cors 
 https://maddevs.io/blog/web-security-an-overview-of-sop-cors-and-csrf/
+
+https://portswigger.net/web-security/learning-paths/cors/cors-what-is-cors-cross-origin-resource-sharing/cors/what-is-cors-cross-origin-resource-sharing
+
 cors request can be divided into 2 types 
 * safe request 
 * preflighted
