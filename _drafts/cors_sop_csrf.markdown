@@ -4,6 +4,15 @@ https://maddevs.io/blog/web-security-an-overview-of-sop-cors-and-csrf/
 
 https://portswigger.net/web-security/learning-paths/cors/cors-what-is-cors-cross-origin-resource-sharing/cors/what-is-cors-cross-origin-resource-sharing
 
+https://medium.com/@zhaojunemail/sop-cors-csrf-and-xss-simply-explained-with-examples-af6119156726
+
+we have the sop or the same origin policy. it is the restriction with what javascript can interact with. 
+it is a browser side constraint. 
+so , lets say you try to hit a endpoint from example.com from malicious.com , you will get a response code of 200 in your browser but browser wont let you read it. you can use something like fiddler and you can see server actually sends the response. 
+
+Now , sop is very restrictive. we need something to relax it. that is where cors comes in.  enable CORS, the server needs to tell browser that he is happy to handle cross-origin request. so we tell him this domains , headers  and methods are okay 
+
+
 cors request can be divided into 2 types 
 * safe request 
 * preflighted
@@ -18,10 +27,22 @@ why dont we put HEAD on a request to know more baout a endpoint lol
 we get the same cors error as the normal request, but in preflight request , we see 2 requests.  
 ![alt text](image-2.png)
 we first send the preflight request and it looks something like this 
+##### Request Body
 ```
-OPTIONS /resource HTTP/1.1
-Host: domain-b.com
-Origin: http://domain-a.com
-Access-Control-Request-Method: DELETE
-Access-Control-Request-Headers: Content-Type
+OPTIONS /data HTTP/1.1
+Host: api.example.com
+Origin: http://frontend.example.com
+Access-Control-Request-Method: POST
 ```
+the response would be something like 
+##### Response Body
+```
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: http://frontend.example.com
+Access-Control-Allow-Methods: PUT
+Access-Control-Allow-Headers: Content-Type
+```
+this will fail as the `Access-Control-Allow-Origin` only allows `PUT` and the request. 
+
+Now lets see CSRF 
+
