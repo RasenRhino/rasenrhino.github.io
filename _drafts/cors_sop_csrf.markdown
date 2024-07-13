@@ -1,4 +1,3 @@
-i am confused about this line in portswigger, "cors does not prevent csrf". need to dig a bit deeper. 
 so lets talk about cors 
 https://maddevs.io/blog/web-security-an-overview-of-sop-cors-and-csrf/
 
@@ -27,6 +26,7 @@ why dont we put HEAD on a request to know more baout a endpoint lol
 we get the same cors error as the normal request, but in preflight request , we see 2 requests.  
 ![alt text](image-2.png)
 we first send the preflight request and it looks something like this 
+![alt text](image-5.png)
 ##### Request Body
 ```
 OPTIONS /data HTTP/1.1
@@ -45,4 +45,10 @@ Access-Control-Allow-Headers: Content-Type
 this will fail as the `Access-Control-Allow-Origin` only allows `PUT` and the request. 
 
 Now lets see CSRF 
+
+now csrf tokens , why cant they be copied in your request, chatgpt says httponly requests cannot be copied by javascript. 
+
+question : so cors blockage is happening from server end, then what is the point of javascript 
+
+https://stackoverflow.com/questions/24680302/csrf-protection-with-cors-origin-header-vs-csrf-token
 
