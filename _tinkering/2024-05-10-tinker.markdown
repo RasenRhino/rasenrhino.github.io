@@ -4,4 +4,11 @@ title:  "Tinker"
 date:   2024-05-10 21:24:36 +0530
 ---
 
-Still no tinkering
+### Users and Groups Management
+useradd sometimes does not create home directory and other stuff
+```
+sudo adduser newuser
+sudo groupadd newgroup
+sudo usermod -aG newgroup newuser
+```
+Verify the group creation: Check the /etc/group file (the primary file that keeps track of all groups) to confirm the new group has been created.
