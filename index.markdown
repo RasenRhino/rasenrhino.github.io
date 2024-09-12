@@ -9,7 +9,7 @@ layout: home
 
 ## Hello there! 
 
-I'm Ridham Bhagat, a computer engineering student. You can find my resume [here](/assets/ridham_bhagat_cv.pdf). 
+I'm lily, a computer engineering student. You can find my resume [here](/assets/ridham_bhagat_cv.pdf). 
 
 **My interests and fancies:**
 
