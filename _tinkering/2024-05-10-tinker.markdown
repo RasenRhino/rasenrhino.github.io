@@ -196,3 +196,5 @@ Each field has its own set of permissible values, which can be accompanied or sw
 
 ![alt text](image-1.png)
 
+### for bash scripting 
+https://ryanstutorials.net/bash-scripting-tutorial/bash-input.php
