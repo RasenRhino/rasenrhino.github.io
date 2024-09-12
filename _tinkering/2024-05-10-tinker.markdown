@@ -136,4 +136,63 @@ we use the `--permanent` flag so that we can make sure that even after reload, f
 ```
 [tcarrigan@server ~]$ sudo firewall-cmd --reload
 ```
+https://www.redhat.com/sysadmin/beginners-guide-firewalld
+
+
+
+##### some iptables stuff 
+
+https://www.youtube.com/watch?v=eC8scXX1_1M
+
+```
+iptables -A INPUT -s 192.168.0.1 DROP
+```
+-A = append 
+-s = source 
+we can put a subent mask as well 
+
+```
+iptables -A INPUT -s 192.168.0.0/24 -p tcp --destination-port 25  DROP
+```
+ -p =protocols
+
+ ###### TO accept 
+
+```
+iptables -A INPUT -s 192.168.0.1 -j ACCEPT
+```
+
+##### to delete a rule
+![alt text](image.png)
+
+so acept wont work here as it is the third rule , it gets blocked by first 2
+
+now to add it to the first (-A appends it)
+to the top of the chain, we use -I 
+
+```
+iptables -I INPUT -s 192.168.0.1 -j ACCEPT
+```
+
+### Docker containers
+
+```
+docker pull image_name
+docker run -d image_name
+
+```
+
+### Cronjob 
+
+```
+MIN HOUR DOM MON DOW CMD
+```
+The first five fields, each separated by a single space, represent time intervals: MIN for minutes, HOUR for hours, DOM for day of the month, MON for month, and DOW for day of the week. They tell Cron when to initiate the cron job.
+
+```
+0 9 1 1 * /path/to/your_script.sh
+```
+Each field has its own set of permissible values, which can be accompanied or swapped for a special character. The asterisk (*) operator in this example instructs Cron to execute the job regardless of which day of the week falls on January 1st.
+
+![alt text](image-1.png)
 
