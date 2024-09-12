@@ -198,3 +198,9 @@ Each field has its own set of permissible values, which can be accompanied or sw
 
 ### for bash scripting 
 https://ryanstutorials.net/bash-scripting-tutorial/bash-input.php
+
+
+![alt text](image-2.png)
+
+https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04
+
