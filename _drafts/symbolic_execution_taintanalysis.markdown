@@ -18,3 +18,8 @@ OWASP Benchmark score
 
 CHECK - penetration testing
 CHECK is the scheme under which NCSC approved companies can conduct authorised penetration tests of public sector and CNI systems and networks.
+
+. Second, dynamic taint
+ analysis can miss the information flow from a source to a
+ sink, which we call undertainting
+ this is problematic 
