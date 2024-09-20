@@ -204,3 +204,88 @@ https://ryanstutorials.net/bash-scripting-tutorial/bash-input.php
 
 https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04
 
+### Docker stuff 
+
+```
+docker run -d --name myhttpd -p 8080:80 httpd
+docker run -d --name my-httpd-container -p 8080:80 -v /home/user/website:/usr/local/apache2/htdocs/ httpd
+docker stop my-httpd-container
+docker rm my-httpd-container
+
+```
+
+### public key stuff
+```
+sudo vim /etc/ssh/sshd_config
+Match User administrator
+    PasswordAuthentication yes
+sudo systemctl restart ssh
+
+ cat ~/.ssh/abc.pub | ssh -i ~/.ssh/def administrator@remote_host "cat >> ~/.ssh/authorized_keys"
+
+```
+
+### add public key for a different user 
+```
+id Administrator
+sudo adduser Administrator
+sudo mkdir /home/Administrator/.ssh
+sudo chmod 700 /home/Administrator/.ssh
+sudo chown Administrator:Administrator /home/Administrator/.ssh
+sudo nano /home/Administrator/.ssh/authorized_keys
+```
+
+set correct permissions 
+```
+sudo chmod 600 /home/Administrator/.ssh/authorized_keys
+sudo chown Administrator:Administrator /home/Administrator/.ssh/authorized_keys
+```
+verify sshd configuration
+```
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+```
+
+```
+sudo systemctl restart sshd
+```
+
+
+### encrypt-files 
+
+```
+#!/bin/bash
+
+# Directory where the files are located
+DIR="/home/your_user/encrypt_dir"
+
+# Password for GPG encryption (can be stored more securely in a file or as an environment variable)
+PASSWORD="your_password"
+
+# Find all files that don't have the .gpg extension
+find "$DIR" -type f ! -name "*.gpg" | while read FILE; do
+    # Encrypt the file using GPG symmetric encryption
+    echo "$PASSWORD" | gpg --batch --yes --passphrase-fd 0 --symmetric "$FILE"
+
+    # Remove the original unencrypted file after encryption
+    if [ $? -eq 0 ]; then
+        rm -f "$FILE"
+    fi
+done
+```
+
+```
+chmod +x /home/your_user/encrypt_files.sh
+```
+
+```
+crontab -e
+```
+
+```
+*/5 * * * * /home/your_user/encrypt_files.sh
+```
+
+```
+gpg --decrypt file.gpg
+```

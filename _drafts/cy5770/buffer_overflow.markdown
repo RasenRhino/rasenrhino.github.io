@@ -1,0 +1,1 @@
+so piping means that the porgram is taking an input from stdin , but what if a program is not taking input from stdin 
