@@ -4,9 +4,10 @@ title: Posts
 permalink: /posts/
 
 ---
+<p>Total posts: {{ site.posts.size }}</p>
+
  <ul class="post-list">
   {%- if site.posts.size > 0 -%}
-   
       {%- for post in site.posts -%}
       <li>
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
