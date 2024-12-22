@@ -7,7 +7,6 @@ layout: home
 
 <!-- <img src="/assets/images/your_photo.jpg" alt="Your Name" class="profile-image"> -->
 
-## Hello there! 
 
 I'm Ridham, a computer engineering student majoring in cybersecurity at Northeastern. I majorly play around with binaries and some web stuff.  You can find my resume [here](/assets/ridham_bhagat_cv.pdf). 
 
