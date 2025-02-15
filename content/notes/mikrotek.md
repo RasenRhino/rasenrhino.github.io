@@ -67,3 +67,4 @@ solition , use `/interface bridge filter`
 linux file attributes 
 sudo -l only tells your permissions 
 check sudoers 
+dns server ssh not required, so disable them 
