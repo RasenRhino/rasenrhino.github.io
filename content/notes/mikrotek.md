@@ -49,3 +49,19 @@ solition , use `/interface bridge filter`
 /ip service set winbox address=192.168.88.0/24  # Restrict to a trusted subnet
 /ip service disable telnet,ftp,api-ssl
 ```
+
+
+### do some pings 
+
+
+```
+/tool fetch url="http://your-public-ip" mode=http dst-path=response.txt keep-result=yes
+```
+
+##### show  arp table (to see current ips)
+
+```
+/ip arp print
+```
+
+linux file attributes 
