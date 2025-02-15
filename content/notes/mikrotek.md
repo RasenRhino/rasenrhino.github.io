@@ -65,3 +65,5 @@ solition , use `/interface bridge filter`
 ```
 
 linux file attributes 
+sudo -l only tells your permissions 
+check sudoers 
