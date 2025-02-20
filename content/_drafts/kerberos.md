@@ -30,3 +30,6 @@ S3 : Service <-> Server
 
 // I will update it after class
 
+The fact that Alice is talking to Bob will be known by the KDC. The KDC
+can also remember the key that it created for Alice and Bob to
+communicate and so can decrypt all their communication.
