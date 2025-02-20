@@ -98,3 +98,8 @@ Some notes I made while hanging around CCDC folks.
 - Some services may **fail after password changes**, requiring manual intervention.
 - **Avoid unnecessary deletions**—disable instead.
 - Review **NCAE Cyber Games** checklist and set up a **VM** for testing.
+
+
+## Snort 
+
+there is something like a snort, it is suppsed to be a IDS , can be used as a packet logger or packet sniffer
