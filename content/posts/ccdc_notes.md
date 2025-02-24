@@ -103,3 +103,59 @@ Some notes I made while hanging around CCDC folks.
 ## Snort 
 
 there is something like a snort, it is suppsed to be a IDS , can be used as a packet logger or packet sniffer
+
+
+## Locking and expiring an account 
+
+#### Locking
+
+`passwd -l username` locks the account, puts a ! in the shadow file  eg :-
+
+Before locking 
+
+`user:$6$asjdhfjaweh$:...` 
+
+After Locking
+
+`user:!$6$asjdhfjaweh$:...` 
+
+but this only blocks password blocking 
+
+Does NOT block access via non-password methods such as:
+
+- SSH keys
+- su (if a privileged user)
+- cron jobs
+- Other services that bypass password authentication
+
+Good for temporary disabling of an account while allowing other automated or non-password-based access.
+
+#### Expiring an Account
+
+Expiring an account marks the user as no longer valid after a specific date or immediately.
+
+`chage -E 0 username` (the -E flag sets an expiration date, 0 meaning immediate expiration).
+
+#### SELinux 
+
+SELinux can run in one of three modes: enforcing, permissive, or disabled.
+
+- Enforcing mode : the selinux policy is enforced, default mode of operation 
+- Permissive mode : the system acts as if SElinux is enforcing the policy , it emits cases into logs but does not deny any operations 
+- disabled mode : Disabled mode is strongly discouraged; not only does the system avoid enforcing the SELinux policy, it also avoids labeling any persistent objects such as files, making it difficult to enable SELinux in the future. Files get changed and then you have to label entire filesystem .
+
+selinux format 
+
+`user:role:type:level`
+
+eg : `system_u:object_r:cert_t:s0`
+
+apache httpd_t is allowed to read cert_t types 
+
+
+#### Network bridge 
+connect 2 LANs together 
+Since network bridges are Layer 2 devices, they forward packets to sub-LANs using MAC addresses
+If the bridge does not know the source MAC addresses, the packet is broadcasted to all nodes. When a match is found, the MAC address is annotated in the designated table. 
+
+

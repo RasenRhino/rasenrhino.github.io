@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ridham's Blog</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">
+        <a href="/">Mikrotek router</a>
+      </h1>    
+        <nav class="site-nav">
+        
+          <a href="/">Home</a>
+        
+          <a href="/posts/">Posts</a>
+        
+          <a href="/notes/">Notes</a>
+        
+          <a href="/thoughts/">Thoughts</a>
+        
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <article class="post">
+      <h5>Current IP address assigned to device</h5>
+<pre class="codehilite"><code>/ip address print
+</code></pre>
+
+<h5>Print Interfaces</h5>
+<pre class="codehilite"><code>/interface print
+</code></pre>
+
+<h5>Add and remove address</h5>
+<pre class="codehilite"><code>/ip address add address=172.20.182.1/16 interface=ether5
+/ip address remove #num
+</code></pre>
+
+<h5>Check bridges</h5>
+<pre class="codehilite"><code>/interface bridge port print
+</code></pre>
+
+<p>you can bridge the router lan ports , but traffic between devices on the same bridge does not pass through the router’s IP layer, so normal IP firewall rules won’t apply.
+solition , use <code>/interface bridge filter</code> </p>
+<h5>print interface list member</h5>
+<pre class="codehilite"><code>/interface list member print
+</code></pre>
+
+<h5>print nat</h5>
+<pre class="codehilite"><code>/ip firewall nat print
+</code></pre>
+
+<h3>hardening</h3>
+<h4>trusted subnets</h4>
+<pre class="codehilite"><code>/ip service set winbox address=192.168.88.0/24  # Restrict to a trusted subnet
+/ip service disable telnet,ftp,api-ssl
+</code></pre>
+
+<h3>do some pings</h3>
+<pre class="codehilite"><code>/tool fetch url=&quot;http://your-public-ip&quot; mode=http dst-path=response.txt keep-result=yes
+</code></pre>
+
+<h5>show  arp table (to see current ips)</h5>
+<pre class="codehilite"><code>/ip arp print
+</code></pre>
+
+<p>linux file attributes 
+sudo -l only tells your permissions 
+check sudoers 
+dns server ssh not required, so disable them</p>
+    </article>
+    
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 My Cactus Dark Blog. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
