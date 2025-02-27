@@ -13,3 +13,6 @@ and -e to make it interpret
 read more on echo modes 
 
 umask = directory permissions - umask 
+
+
+useradd -m -s /bin/bash ridham
