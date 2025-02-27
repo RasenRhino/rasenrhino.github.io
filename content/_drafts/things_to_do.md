@@ -11,3 +11,5 @@ echo by default adds a new line
 and -n to prevent it from interpreting , 
 and -e to make it interpret 
 read more on echo modes 
+
+umask = directory permissions - umask 
