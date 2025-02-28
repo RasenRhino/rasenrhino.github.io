@@ -18,3 +18,6 @@ umask = directory permissions - umask
 useradd -m -s /bin/bash ridham
 
 never bind docker with -p host:dockerport , do a 127.0.0.1:hostport:dockerport because it will expose it otherwise (can this be a PR?)
+
+read CSRs flow 
+read heartbleed and wy you need seprate private key 
