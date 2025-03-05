@@ -31,3 +31,17 @@ Why It Works:
 Merkle-Damgård allows continued hashing from an intermediate state.
 Padding is deterministic, so the attacker can reconstruct it.
 The final hash exposes internal state, enabling hash extension.
+
+✅ SHA-3 (Keccak)
+Uses the sponge construction, which does not allow length extension.
+More resistant to collision and preimage attacks.
+Officially standardized as the successor to SHA-2.
+
+![alt text](image-1.png)
+
+
+
+Lamport signs 
+if you give me multiple signatures, i may be able to construct a sign that i can forge 
+but for that i required 2^128 attempts 
+hence you never reuse them. 
