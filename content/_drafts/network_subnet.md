@@ -30,3 +30,6 @@ So the full range of 10.10.138.0/23 is
 Network address: 10.10.138.0
 Broadcast address: 10.10.139.255
 Usable IPs: 10.10.138.1 – 10.10.139.254
+
+also apprently you can make network interfaces promiscious manually lmao i didnt know that 
+
