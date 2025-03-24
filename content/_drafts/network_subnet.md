@@ -33,3 +33,102 @@ Usable IPs: 10.10.138.1 – 10.10.139.254
 
 also apprently you can make network interfaces promiscious manually lmao i didnt know that 
 
+snort rules types 
+- alert 
+- block 
+- drop 
+- logging 
+- pass
+
+
+rule-type traffic-type source-ip port -> (direction) $HOME_NEY any (any ip in the home net network variable) (msg:"some message";sid:1234;rev:1)
+
+
+```
+pass tcp $EXTERNAL_NET any -> $HOME_NET $HTTP_PORTS (
+    flow:to_server;
+    metadata:service http;
+    flowbits:isnotset,cgi-tag;
+    uricontent:"cgi-bin/";
+    nocase;
+    flowbits:set,cgi-tag;
+    sid:1000002;
+    rev:1;
+)
+```
+
+Snort can be run in 2 modes 
+- Sniffer mode  (-v)
+- Packet Logger mode  
+- NIDS mode (network intrusion detection system)
+
+
+
+```
+pass tcp $EXTERNAL_NET any -> $HOME_NET $HTTP_PORTS (
+    flow:to_server;
+    metadata:service http;
+    flowbits:isnotset,cgi-tag;
+    uricontent:"cgi-bin/";
+    nocase;
+    flowbits:set,cgi-tag;
+    sid:1000002;
+    rev:1;
+)
+```
+
+
+```
+alert tcp $HOME_NET $HTTP_PORTS -> $EXTERNAL_NET any (
+    flow:from_server,established;
+    file_data;
+    content:"load";
+    flowbits:isset,cgi-tag;
+    flowbits:unset,cgi-tag;
+    sid:1000003;
+    rev:1;
+)
+```
+
+
+### File Download check 
+
+```
+pass tcp any any -> $HOME_NET 80 (flow:to_server; metadata:service http secret-file; flowbits:isnotset,secret-file; uricontent:"secret/"; nocase; flowbits:set,secret-file; sid:1000002; rev:1;)
+```
+
+
+```
+alert tcp $HOME_NET 80 -> any any (flow:from_server, established; uricontent:"corp-sec-salary.xlsx" ; flowbits:isset,secret-file; metadata:service http; flowbits:unset,secret-file; sid:1000003; rev:1;)
+```
+flowbits:isset,secret-file; flowbits:unset,secret-file;
+find a rule using : grep -r "sid:384" /etc/snort/rules/
+
+```
+sudo snort -i eth1 -v -d -e -c /etc/snort/snort.conf -f "host 10.10.138.150 and port 80"
+```
+
+```
+tcpdump -n -i eth1 2>&1 | cat
+```
+
+why do i need any , any , why does it not work with homenet 80 
+
+```
+#alert tcp any any -> any 80 (flow:to_server; metadata:service http secret-file; flowbits:isnotset,secret-file; uricontent:"secret/"; nocase; flowbits:set,secret-file; sid:1000002; rev:1;)
+#alert tcp any any -> any any (msg:"Excel file download request detected";  content:"sheet"; http_header; nocase; sid:1000006; rev:1;)
+alert tcp any any -> $HOME_NET 80 (flow:to_server; metadata:service http secret-file; flowbits:isnotset,secret-file; uricontent:"secret/"; nocase; flowbits:set,secret-file; sid:1000002; rev:1;)
+
+alert tcp any any -> $HOME_NET any (msg:"Excel file download request detected"; flow:to_server ;uricontent:"corp-sec-salary.xlsx" ;metadata:service http;sid:1000003; rev:1;)
+
+#alert tcp any any -> any any ( msg:"XLSX file response detected"; flow:from_server ;   flowbits:isset,secret-file; flowbits:unset,secret-file; content:"spreadsheetml"; http_raw_header ; metadata:service http;  sid:1000004; rev:1; )
+alert tcp any any -> $HOME_NET 2222 (msg:"SSH Access Attempt on Port 2222"; flow:to_server,established; sid:1000005; rev:1;)
+
+
+```
+
+### SSH check
+
+```
+alert tcp any any -> $HOME_NET 2222 (msg:"SSH Access Attempt on Port 2222"; flow:to_server,established; sid:1000005; rev:1;)
+```
