@@ -132,3 +132,9 @@ alert tcp any any -> $HOME_NET 2222 (msg:"SSH Access Attempt on Port 2222"; flow
 ```
 alert tcp any any -> $HOME_NET 2222 (msg:"SSH Access Attempt on Port 2222"; flow:to_server,established; sid:1000005; rev:1;)
 ```
+
+### Suspicious ICMP scan 
+
+```
+alert icmp $EXTERNAL_NET any -> $HOME_NET any (msg:"Suspicious ICMP Scan Detected"; detection_filter: track by_src, count 5, seconds 10; sid:100001; rev:1;)
+```
