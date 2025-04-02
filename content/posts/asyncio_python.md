@@ -1,5 +1,5 @@
 ---
-title: Asyncio Python - an explorers account
+title: Asyncio Python - dum dum version
 date: 2024-04-02
 tags: [os,python,asyncio]
 ---
