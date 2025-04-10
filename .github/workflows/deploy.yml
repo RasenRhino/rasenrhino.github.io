@@ -36,7 +36,6 @@ jobs:
           echo "Creating deployment directory..."
           mkdir deploy
           echo "Copying build output to deployment directory..."
-          echo "yes" >> deploy/somefile.html
           rsync -av --delete build/ deploy/
           cd deploy
           echo "Initializing git repository..."
