@@ -129,6 +129,40 @@
 </ul>
 <h2>Snort</h2>
 <p>there is something like a snort, it is suppsed to be a IDS , can be used as a packet logger or packet sniffer</p>
+<h2>Locking and expiring an account</h2>
+<h4>Locking</h4>
+<p><code>passwd -l username</code> locks the account, puts a ! in the shadow file  eg :-</p>
+<p>Before locking </p>
+<p><code>user:$6$asjdhfjaweh$:...</code> </p>
+<p>After Locking</p>
+<p><code>user:!$6$asjdhfjaweh$:...</code> </p>
+<p>but this only blocks password blocking </p>
+<p>Does NOT block access via non-password methods such as:</p>
+<ul>
+<li>SSH keys</li>
+<li>su (if a privileged user)</li>
+<li>cron jobs</li>
+<li>Other services that bypass password authentication</li>
+</ul>
+<p>Good for temporary disabling of an account while allowing other automated or non-password-based access.</p>
+<h4>Expiring an Account</h4>
+<p>Expiring an account marks the user as no longer valid after a specific date or immediately.</p>
+<p><code>chage -E 0 username</code> (the -E flag sets an expiration date, 0 meaning immediate expiration).</p>
+<h4>SELinux</h4>
+<p>SELinux can run in one of three modes: enforcing, permissive, or disabled.</p>
+<ul>
+<li>Enforcing mode : the selinux policy is enforced, default mode of operation </li>
+<li>Permissive mode : the system acts as if SElinux is enforcing the policy , it emits cases into logs but does not deny any operations </li>
+<li>disabled mode : Disabled mode is strongly discouraged; not only does the system avoid enforcing the SELinux policy, it also avoids labeling any persistent objects such as files, making it difficult to enable SELinux in the future. Files get changed and then you have to label entire filesystem .</li>
+</ul>
+<p>selinux format </p>
+<p><code>user:role:type:level</code></p>
+<p>eg : <code>system_u:object_r:cert_t:s0</code></p>
+<p>apache httpd_t is allowed to read cert_t types </p>
+<h4>Network bridge</h4>
+<p>connect 2 LANs together 
+Since network bridges are Layer 2 devices, they forward packets to sub-LANs using MAC addresses
+If the bridge does not know the source MAC addresses, the packet is broadcasted to all nodes. When a match is found, the MAC address is annotated in the designated table.</p>
     </article>
     
   </main>
