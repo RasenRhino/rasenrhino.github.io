@@ -206,7 +206,9 @@ def main():
     if dest_dir.exists():
         shutil.rmtree(dest_dir)
     os.makedirs(dest_dir, exist_ok=True)
-    with open('static/'+'somefile.html', "w") as the_file:
+    with open('static/'+'reverse.html', "w") as the_file:
+        the_file.write("no")
+    with open('static/'+'socat.html', "w") as the_file:
         the_file.write("no")
     nav_links = generate_nav_links(src_dir)
     process_directory(src_dir, dest_dir, nav_links)
