@@ -71,16 +71,23 @@ solition , use `/interface bridge filter`
 /ip firewall nat print
 ```
 
-### hardening 
+## hardening 
+
+
+#### list services 
+
+```
+/ip service print
+```
 
 #### trusted subnets 
 
 ```
-/ip service set winbox address=192.168.88.0/24  # Restrict to a trusted subnet
+/ip service set winbox address=192.168.209.0/24  # Restrict to a trusted subnet
 /ip service disable telnet,ftp,api-ssl
 ```
 
-
+/ip service set winbox address=192.168.209.0/24
 ### do some pings 
 
 

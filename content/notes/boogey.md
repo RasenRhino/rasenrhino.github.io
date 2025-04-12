@@ -156,3 +156,9 @@ while true; do
     sleep 5
 done
 ```
+
+to start a python webserver 
+
+```
+python3 -m http.server 8080
+```
