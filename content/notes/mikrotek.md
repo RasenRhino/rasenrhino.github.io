@@ -39,7 +39,7 @@ change it to enable to reenable
 /user add name=netadmin group=full password=StrongPass123
 ```
 
-##### Change user password 
+##### Change user password - where command 
 
 ```
 /user set [find where name="USERNAME"] password=NEWPASSWORD
