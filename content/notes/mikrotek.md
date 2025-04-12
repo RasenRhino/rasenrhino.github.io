@@ -3,6 +3,11 @@ title: Mikrotek router
 date: 2023-08-01
 tags: [networking,homelab]
 ---
+
+`/ping`
+
+
+
 ##### Current IP address assigned to device
 ```
 /ip address print
