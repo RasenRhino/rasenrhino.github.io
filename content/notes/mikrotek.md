@@ -20,6 +20,31 @@ tags: [networking,homelab]
 /ip address remove #num
 ```
 
+##### User list 
+
+```
+/user print
+```
+
+##### user disable 
+
+```
+/user disable [find where name="USERNAME"]
+change it to enable to reenable
+```
+
+##### create new user 
+
+```
+/user add name=netadmin group=full password=StrongPass123
+```
+
+##### Change user password 
+
+```
+/user set [find where name="USERNAME"] password=NEWPASSWORD
+```
+
 ##### Check bridges 
 
 ```
