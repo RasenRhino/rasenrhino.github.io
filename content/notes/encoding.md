@@ -3,6 +3,9 @@ title: Encoding rabbithole
 date: 2025-06-03
 tags: [encoding,PL]
 ---
+this is a chatgpt chat summarised , by chatgpt for my personal reference, 
+
+if you can understand this, ggwp 
 
 “so utf-8 only has like 8 bits , so it can only represent 256 charecters?”
 
