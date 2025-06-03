@@ -130,7 +130,7 @@ alert tcp any any -> $HOME_NET 2222 (msg:"SSH Access Attempt on Port 2222"; flow
 ### SSH check
 
 ```
-alert tcp any any -> $HOME_NET 2222 (msg:"SSH Access Attempt on Port 2222"; flow:to_server,established; sid:1000005; rev:1;)
+alert tcp any any -> $HOME_NET 2222 (msg:"SSH Access Attempt on Port 2222"; flow:to_server,established; flags:S ;sid:1000005; rev:1;)
 ```
 
 ### Suspicious ICMP scan 
@@ -138,3 +138,10 @@ alert tcp any any -> $HOME_NET 2222 (msg:"SSH Access Attempt on Port 2222"; flow
 ```
 alert icmp $EXTERNAL_NET any -> $HOME_NET any (msg:"Suspicious ICMP Scan Detected"; detection_filter: track by_src, count 5, seconds 10; sid:100001; rev:1;)
 ```
+
+alert tcp $HOME_NET [21,25,443,465,636,992,993,995,2484] -> $EXTERNAL_NET any (msg:"SERVER-OTHER OpenSSL SSLv3 large heartbeat response - possible ssl heartbleed attempt"; flow:to_client,established,only_stream; content:"|18 03 00|"; depth:3; byte_test:2,>,128,0,relative; content:"|02|"; within:1; distance:2; metadata:policy balanced-ips drop, policy max-detect-ips drop, policy security-ips drop, ruleset community, service ssl; reference:cve,2014-0160; classtype:attempted-recon; sid:1000012; rev:11;)
+alert tcp $HOME_NET [21,25,443,465,636,992,993,995,2484] -> $EXTERNAL_NET any (msg:"SERVER-OTHER OpenSSL TLSv1 large heartbeat response - possible ssl heartbleed attempt"; flow:to_client,established,only_stream; content:"|18 03 01|"; depth:3; byte_test:2,>,128,0,relative; content:"|02|"; within:1; distance:2; metadata:policy balanced-ips drop, policy max-detect-ips drop, policy security-ips drop, ruleset community, service ssl; reference:cve,2014-0160; classtype:attempted-recon; sid:1000013; rev:11;)
+alert tcp $HOME_NET [21,25,443,465,636,992,993,995,2484] -> $EXTERNAL_NET any (msg:"SERVER-OTHER OpenSSL TLSv1.1 large heartbeat response - possible ssl heartbleed attempt"; flow:to_client,established,only_stream; content:"|18 03 02|"; depth:3; byte_test:2,>,128,0,relative; content:"|02|"; within:1; distance:2; metadata:policy balanced-ips drop, policy max-detect-ips drop, policy security-ips drop, ruleset community, service ssl; reference:cve,2014-0160; classtype:attempted-recon; sid:1000014; rev:11;)
+alert tcp $HOME_NET [21,25,443,465,636,992,993,995,2484] -> $EXTERNAL_NET any (msg:"SERVER-OTHER OpenSSL TLSv1.2 large heartbeat response - possible ssl heartbleed attempt"; flow:to_client,established,only_stream; content:"|18 03 03|"; depth:3; byte_test:2,>,128,0,relative; content:"|02|"; within:1; distance:2; metadata:policy balanced-ips drop, policy max-detect-ips drop, policy security-ips drop, ruleset community, service ssl; reference:cve,2014-0160; classtype:attempted-recon; sid:1000015; rev:11;)
+
+
