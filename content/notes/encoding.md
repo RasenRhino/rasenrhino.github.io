@@ -1,4 +1,9 @@
-YOUR EXACT QUESTIONS & SHORT, DIRECT ANSWERS
+---
+title: Encoding rabbithole 
+date: 2025-06-03
+tags: [encoding,PL]
+---
+
 “so utf-8 only has like 8 bits , so it can only represent 256 charecters?”
 
 No. 8 bits is the size of one byte, but UTF-8 lets a character use 1, 2, 3 or 4 bytes. That yields well over a million possible characters.
