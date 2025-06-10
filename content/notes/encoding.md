@@ -6,7 +6,6 @@ tags: [encoding,PL]
 this is a chatgpt chat summarised , by chatgpt for my personal reference, 
 
 if you can understand this, ggwp 
-
 “so utf-8 only has like 8 bits , so it can only represent 256 charecters?”
 
 No. 8 bits is the size of one byte, but UTF-8 lets a character use 1, 2, 3 or 4 bytes. That yields well over a million possible characters.
