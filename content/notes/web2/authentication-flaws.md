@@ -16,3 +16,31 @@ you can try to brute force simple ones,
 but there can be times when they log you out
 so for that , you got the macros , you just keep relogging and retrying 
 
+#### Why no basic auth 
+
+some browsers usually attempt https first 
+
+firefox does not, if a http link is present, it will straight go to port 80 
+
+Why the fallback still lets a Basic-Auth leak happen
+User types example.com (or clicks a plain-HTTP link).
+
+Browser first attempts https://example.com/.
+
+Attacker interferes — blocks packets or serves an invalid cert.
+
+Browser’s auto-upgrade logic gives up and retries http://example.com/.
+
+Attacker replies with 401 Unauthorized WWW-Authenticate: Basic, harvests the credentials the moment the user (or the browser) resends the request with Authorization: Basic ….
+
+
+### READ SOME STUFF ON FORGET PASSWORD FLOWS , how do people forget to validate the token ? dafuq is that 
+
+| Control | Why it matters |
+|---------|----------------|
+| **Store the token server-side** (or sign it with an HMAC and verify). | Prevents tampering or omission. |
+| **Bind token → user → request-IP/User-Agent** and mark *single-use*. | Stops replay or swapping usernames. |
+| **Short TTL** (e.g., 10–15 min). | Shrinks the brute-force window. |
+| **Enforce rate limits / lock-outs** **and** alert unusual volumes. | Makes enumeration impractical. |
+| **Send reset links only over HTTPS; set `SameSite=Lax` cookies.** | Thwarts host-header poisoning and CSRF tricks. |
+| **Security review of every “make state-changing POST” endpoint.** | Catches the “token-not-checked” bug before prod. |

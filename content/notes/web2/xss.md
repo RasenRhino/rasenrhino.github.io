@@ -29,3 +29,11 @@ Say you put stuff, broswer doees something to it and it passes on as an input so
 idk about this 
 
 ### Look into solving XSS and why it is not that simple
+
+
+## HTTPonly stuff
+
+If the cookie gives access to anything you care about—set it Secure; HttpOnly; SameSite, and never let front-end JavaScript touch it.
+
+it prevents it from being access by javascript document.getcookie 
+
