@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ridham's Blog</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">
+        <a href="/">Asyncio Python - dum dum version</a>
+      </h1>    
+        <nav class="site-nav">
+        
+          <a href="/">Home</a>
+        
+          <a href="/posts/">Posts</a>
+        
+          <a href="/notes/">Notes</a>
+        
+          <a href="/thoughts/">Thoughts</a>
+        
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <article class="post">
+      <p>Asyncio is CONCURRENT execution </p>
+<p>Python supports concurrency through threading and asyncio, but due to the GIL, threads can't run Python bytecode in parallel. That's why asyncio is preferred for I/O-bound concurrency.</p>
+<p>NOTE that is is different from python processes, in that you have a new interpreter for each process , and avoiding the GIL entirely allowing true parallel execution. </p>
+<p>Asyncio is less resource intensive ? (perhaps do your own research about this, I will use this argument as this corroborates my percieved consensus)</p>
+<p>Example code I will use throughout this post :-  </p>
+<pre class="codehilite"><code>import asyncio
+
+async def task1():
+    print(&quot;Task 1 started&quot;)
+    await asyncio.sleep(2)
+    print(&quot;Task 1 done&quot;)
+
+async def task2():
+    print(&quot;Task 2 started&quot;)
+    await asyncio.sleep(2)
+    print(&quot;Task 2 done&quot;)
+
+async def main():
+    await task1()
+    await task2()
+
+asyncio.run(main())
+</code></pre>
+
+<p>output :-</p>
+<pre class="codehilite"><code>Task 1 started
+(wait 2s)
+Task 1 done
+Task 2 started
+(wait 2s)
+Task 2 done
+</code></pre>
+
+<p>Since </p>
+<p>but if i do this :-
+Parallel tasks with asyncio.create_task</p>
+<pre class="codehilite"><code>async def main():
+    t1 = asyncio.create_task(task1())
+    t2 = asyncio.create_task(task2())
+    await t1
+    await t2
+</code></pre>
+
+<p>output :-</p>
+<pre class="codehilite"><code>Task 1 started
+Task 2 started
+(wait 2s)
+Task 1 done
+Task 2 done
+</code></pre>
+
+<p>but this is because asyncio.sleep yeilds to the event loop , if you used <code>time.sleep</code> instead, it will be blocking, so only after task1 is finished, task2 will be done. </p>
+<h5>TLDR : you change <code>asyncio.sleep</code> to <code>time.sleep</code> , you will have an output like this :-</h5>
+<pre class="codehilite"><code>Task 1 started
+(wait 2s)
+Task 1 done
+Task 2 started 
+(wait 2s)
+Task 2 done
+</code></pre>
+
+<p>Moving on...</p>
+<p>lets say you do something like </p>
+<pre class="codehilite"><code>async def main():
+    asyncio.create_task(task1())  # NOT awaited
+    await task2()                 # Only await t2
+</code></pre>
+
+<p>It will cause you some problems. </p>
+<p>Because the main coroutine (main()) finishes once task2 is done, the event loop shuts down, and any background tasks that haven’t completed are cancelled unless explicitly awaited or held open.</p>
+<p>Your output will look something like :-</p>
+<pre class="codehilite"><code>Task 1 started
+Task 2 started
+Task 2 done
+</code></pre>
+
+<p>Summary of pointers and some more things you might want to take care of :-</p>
+<h3>Try to avoid blocking</h3>
+<p>use something like <code>await loop.run_in_executor(None, blocking_func)</code>. Or use asyncio primitives (eg: <code>asyncio.sleep()</code>)</p>
+<h3>Don't forget to <code>await</code> your <code>create_task()</code></h3>
+<p>Creating a task doesn’t mean it’ll finish.</p>
+<h3>Use <code>asyncio.gather()</code> vs <code>asyncio.wait()</code> properly</h3>
+<p><code>asyncio.gather()</code> : waits for all tasks and <strong>fails fast</strong> on first exception
+<code>asyncio.wait()</code> : gives more fine-grained control (FIRST_COMPLETED, ALL_COMPLETED, etc.)</p>
+<p>Use <code>return_exceptions=True</code> with <code>gather()</code> if you want to collect all exceptions instead of crashing.</p>
+<h3>Unhandled Exceptions in Tasks are Silent by Default</h3>
+<p>Debug that. Or you can use exception handling. Your choice. 
+you can also do something like </p>
+<pre class="codehilite"><code>t = asyncio.create_task(my_task())
+t.add_done_callback(lambda t: print(t.exception()))  # surfaces uncaught exception
+</code></pre>
+
+<h3>Coroutines aren't tasks until you schedule them</h3>
+<pre class="codehilite"><code>coro = my_async_func()        # ← Just a coroutine object
+task = asyncio.create_task(coro)  # ← Now it's scheduled to run
+</code></pre>
+
+<h3>You can use <code>asyncio.Semaphore()</code> or <code>asyncio.BoundedSemaphore()</code> to limit concurrency</h3>
+<h3>Timeouts with <code>asyncio.wait_for()</code></h3>
+<pre class="codehilite"><code>try:
+    await asyncio.wait_for(my_func(), timeout=5)
+except asyncio.TimeoutError:
+    print(&quot;Timed out!&quot;)
+</code></pre>
+    </article>
+    
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 My Cactus Dark Blog. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
