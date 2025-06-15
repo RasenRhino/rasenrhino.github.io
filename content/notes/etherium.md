@@ -10,11 +10,5 @@ no contract can initiate a transaction , only EOA can (how do escrows work then?
 
 in solidity , you dont access stuff using 
 
-for every valid unicode, we have ranges of bytes 
-for UTF-8 , we have 8 bits, so that means only 256 charecters , 
-not quite 
+simply put 
 
-Why it matters: Almost every modern script, punctuation mark, currency sign, emoji precursor, etc., lives here, so one 16-bit value is enough to encode most characters. 
-otherwise we have surrogate pairs, for utf16 , usually not required as much 
-
-if anything goes beyond the 16 bit limit, we use 20 bit values which after subtracting are 
