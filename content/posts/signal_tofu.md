@@ -35,7 +35,7 @@ In theory, yes—if you've never communicated with that phone number before, the
 
 ### Federated Servers?
 
-You might consider federation as a solution to trust the server (as I naively did before thinking about consensus; more on that later).
+I did think breifly that federation can be a good idea.
 
 Fingers point toward Matrix. But reviewing this [CVE list](https://www.cvedetails.com/vulnerability-list/vendor_id-2044/Matrix.html) doesn’t exactly tip the scales in its favor.
 
