@@ -23,6 +23,8 @@ Going through the test suite in the Signal repo, particularly [MessagingTest.jav
 - The signature on the signed prekey is verified against the uploaded identity key.
 - Bindings happen on the client end. Even if numbers like `+1 555 1234` and `+1 555 5678` publish the same identity key, the user’s app will bind that key to whichever number she picked, and that binding is locked on first use.
 
+I did go through some more bits, and the code did work according to the spec. Nothing out of the ordinary. 
+
 But can't a server pretend to be Alice?
 
 ---
