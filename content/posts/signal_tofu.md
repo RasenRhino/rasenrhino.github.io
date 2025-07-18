@@ -27,6 +27,8 @@ I did go through some more bits, and the code did work according to the spec. No
 
 But can't a server pretend to be Alice?
 
+Do we know that the code we are seeing is the one running on the server ?
+
 ---
 
 ### Can the server be malicious?
@@ -35,7 +37,7 @@ In theory, yes—if you've never communicated with that phone number before, the
 
 ---
 
-### Can federated servers be better?
+### Can federated servers for messaging protocols be better?
 
 I did think breifly that federation can be a good idea. But they do have their own challenges. 
 
