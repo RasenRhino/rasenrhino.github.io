@@ -1,7 +1,7 @@
 ---
-title: Mirai Machine
-date: 2023-08-01
-tags: [ctf,htb]
+title: Secure messaging - Me being nitpicky 
+date: 2024-08-01
+tags: []
 ---
 
 
