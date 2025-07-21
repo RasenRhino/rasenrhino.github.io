@@ -4,9 +4,9 @@ date: 2024-08-01
 tags: []
 ---
 
-## Question : If I can represent a file as the decimal expansion of an irrational number, can I now "reverse compress" the file by describing that irrational number in a simple way (e.g. as the result of a division, a formula, or a function)?
+### Question : If I can represent a file as the decimal expansion of an irrational number, can I now "reverse compress" the file by describing that irrational number in a simple way (e.g. as the result of a division, a formula, or a function)?
 
-# Can We Hide Any File Inside a Single Irrational Number?  
+## Can We Hide Any File Inside a Single Irrational Number?  
 ### …and where do **Kolmogorov Complexity** and those “Prime‑Concat” numbers show up?
 
 
