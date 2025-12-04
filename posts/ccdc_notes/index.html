@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ridham's Blog</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">
+        <a href="/">CCDC Notes</a>
+      </h1>    
+        <nav class="site-nav">
+        
+          <a href="/">Home</a>
+        
+          <a href="/posts/">Posts</a>
+        
+          <a href="/thoughts/">Thoughts</a>
+        
+          <a href="/notes/">Notes</a>
+        
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <article class="post">
+      <h1>Red Team &amp; Blue Team Considerations</h1>
+<h2>Red Team Tools &amp; Tactics</h2>
+<p>Some notes I made while hanging around CCDC folks. </p>
+<h3>Cobalt Strike</h3>
+<ul>
+<li>A powerful red team tool combining <strong>Metasploit</strong> features with <strong>beaconing</strong> capabilities.</li>
+<li>Often leverages <code>rundll32.exe</code> for execution.</li>
+</ul>
+<h3>XAMPP</h3>
+<ul>
+<li>A simple way to establish a reverse shell.</li>
+</ul>
+<h3>Kerberoasting</h3>
+<ul>
+<li>Exploiting service tickets for credential extraction.</li>
+</ul>
+<h3>Windows Hash Storage</h3>
+<ul>
+<li>Equivalent to <code>/etc/hashes</code> in Linux.</li>
+<li>Located in <code>C:\Windows\System32\Config\SAM</code>.</li>
+<li>Unauthorized access to this directory should raise concern.</li>
+</ul>
+<h3>LSASS Credential Dumping</h3>
+<ul>
+<li>Tools like <strong>Mimikatz</strong> (<a href="https://github.com/ParrotSec/mimikatz">GitHub</a>) can extract password hashes.</li>
+<li><strong>LSASS process monitoring</strong> is crucial; unauthorized access may indicate credential theft.</li>
+<li><a href="https://www.microsoft.com/en-us/security/blog/2022/10/05/detecting-and-preventing-lsass-credential-dumping-attacks/">Microsoft guide</a> on preventing LSASS attacks.</li>
+</ul>
+<hr />
+<h2>System Security &amp; Hardening</h2>
+<h3>Administrator Account Security</h3>
+<ul>
+<li><code>net user Administrator *</code> does <strong>not</strong> save in history (safe for password changes).</li>
+<li><code>net user Administrator &lt;random&gt;</code> <strong>does</strong> save in history (not recommended).</li>
+</ul>
+<h3>Group Policy Management</h3>
+<ul>
+<li>Use <code>rsop</code> to check applied <strong>Group Policies</strong> (they may overlap and disable security settings).</li>
+<li><code>gpupdate</code> updates policies; requires <strong>relogin</strong> and may take time.</li>
+</ul>
+<h3>Domain &amp; Workgroup Security</h3>
+<ul>
+<li>Profile <strong>domain/workgroup</strong> to understand security implications.</li>
+<li><strong>Emergency "break glass" accounts</strong> should be pre-configured.</li>
+<li><strong>Do not disable user accounts</strong> unless necessary.</li>
+<li><strong>Avoid deleting accounts</strong> when disabling suffices.</li>
+</ul>
+<h3>Password &amp; Credential Security</h3>
+<ul>
+<li><strong>Change default passwords</strong> on all systems.</li>
+<li>Cached logins allow authentication without a domain controller.</li>
+<li>The <strong>number of cached logins</strong> can be adjusted in security settings.</li>
+<li><strong>Use TOTP-based MFA</strong> (e.g., Google Authenticator).</li>
+<li>Red teams may <strong>manipulate system time</strong> to break TOTP.</li>
+</ul>
+<hr />
+<h2>Active Directory &amp; Incident Response</h2>
+<h3>Common Active Directory Tasks</h3>
+<ul>
+<li><strong>Reset passwords</strong></li>
+<li><strong>Create/Delete user accounts</strong></li>
+<li><strong>Monitor Splunk logs</strong> (<code>IP_ADDRESS:8000</code> for access)</li>
+</ul>
+<h3>Security Monitoring</h3>
+<ul>
+<li><strong>Monitor system file access</strong>:</li>
+<li><code>C:\Windows\System32\Config\SAM</code> (Windows password hashes)</li>
+<li>If <strong>unprivileged users</strong> access <code>System32</code>, investigate immediately.</li>
+<li><strong>Monitor suspicious application behavior</strong>, especially in:</li>
+<li><code>C:\Intel\</code></li>
+<li><code>C:\AMD\</code> (Red teams often store tools here)</li>
+</ul>
+<h3>Windows Privilege Hierarchy</h3>
+<ul>
+<li><strong>SYSTEM</strong>: Most privileged Windows account, equivalent to <code>root</code> in Linux.</li>
+<li>Bypasses most <strong>syscall validation</strong>.</li>
+<li>Allows <strong>direct hardware access</strong> via drivers.</li>
+<li><strong>Administrator</strong>: Less privileged than SYSTEM, but still a high-risk account.</li>
+</ul>
+<hr />
+<h2>Kubernetes &amp; Cloud Security</h2>
+<h3>Kubernetes Control Plane Security</h3>
+<ul>
+<li><strong>Raft with etcd</strong> for state management.</li>
+<li><strong>Longhorn</strong>: Persistent storage management (PVC, PBC).</li>
+<li><strong>Time-series databases</strong> in Kubernetes (TCSB).</li>
+</ul>
+<h3>Cloud Services</h3>
+<ul>
+<li><strong>AWS Lex</strong>: AI-driven chatbot service.</li>
+<li><strong>Fluentd</strong> (<a href="https://www.fluentd.org/">fluentd.org</a>): Log aggregation.</li>
+</ul>
+<hr />
+<h2>Miscellaneous Security Considerations</h2>
+<ul>
+<li><strong>If a user has an active session</strong>, changes (e.g., password updates) may not take effect until logout.</li>
+<li>Some services may <strong>fail after password changes</strong>, requiring manual intervention.</li>
+<li><strong>Avoid unnecessary deletions</strong>—disable instead.</li>
+<li>Review <strong>NCAE Cyber Games</strong> checklist and set up a <strong>VM</strong> for testing.</li>
+</ul>
+<h2>Snort</h2>
+<p>there is something like a snort, it is suppsed to be a IDS , can be used as a packet logger or packet sniffer</p>
+<h2>Locking and expiring an account</h2>
+<h4>Locking</h4>
+<p><code>passwd -l username</code> locks the account, puts a ! in the shadow file  eg :-</p>
+<p>Before locking </p>
+<p><code>user:$6$asjdhfjaweh$:...</code> </p>
+<p>After Locking</p>
+<p><code>user:!$6$asjdhfjaweh$:...</code> </p>
+<p>but this only blocks password blocking </p>
+<p>Does NOT block access via non-password methods such as:</p>
+<ul>
+<li>SSH keys</li>
+<li>su (if a privileged user)</li>
+<li>cron jobs</li>
+<li>Other services that bypass password authentication</li>
+</ul>
+<p>Good for temporary disabling of an account while allowing other automated or non-password-based access.</p>
+<h4>Expiring an Account</h4>
+<p>Expiring an account marks the user as no longer valid after a specific date or immediately.</p>
+<p><code>chage -E 0 username</code> (the -E flag sets an expiration date, 0 meaning immediate expiration).</p>
+<h4>SELinux</h4>
+<p>SELinux can run in one of three modes: enforcing, permissive, or disabled.</p>
+<ul>
+<li>Enforcing mode : the selinux policy is enforced, default mode of operation </li>
+<li>Permissive mode : the system acts as if SElinux is enforcing the policy , it emits cases into logs but does not deny any operations </li>
+<li>disabled mode : Disabled mode is strongly discouraged; not only does the system avoid enforcing the SELinux policy, it also avoids labeling any persistent objects such as files, making it difficult to enable SELinux in the future. Files get changed and then you have to label entire filesystem .</li>
+</ul>
+<p>selinux format </p>
+<p><code>user:role:type:level</code></p>
+<p>eg : <code>system_u:object_r:cert_t:s0</code></p>
+<p>apache httpd_t is allowed to read cert_t types </p>
+<h4>Network bridge</h4>
+<p>connect 2 LANs together 
+Since network bridges are Layer 2 devices, they forward packets to sub-LANs using MAC addresses
+If the bridge does not know the source MAC addresses, the packet is broadcasted to all nodes. When a match is found, the MAC address is annotated in the designated table.</p>
+    </article>
+    
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 RasenRhino. No rights reserved </p>
+    </div>
+  </footer>
+</body>
+</html>

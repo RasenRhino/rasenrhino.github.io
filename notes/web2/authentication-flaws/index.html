@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ridham's Blog</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">
+        <a href="/">authentication-flaws</a>
+      </h1>    
+        <nav class="site-nav">
+        
+          <a href="/">Home</a>
+        
+          <a href="/posts/">Posts</a>
+        
+          <a href="/thoughts/">Thoughts</a>
+        
+          <a href="/notes/">Notes</a>
+        
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <article class="post">
+      <h2>Bypassing 2 factor authentication</h2>
+<p>if the user is first prompted to enter a password and then prompted to enter a verification code on a seprate page, the user is effectively logged in state before they have entered the verification code. 
+you can see if you can get to "logged in only" pages </p>
+<p>Flawed 2 factor authentication logic :- </p>
+<p>you login -&gt; cookie is set -&gt; you give the verification code along with the cookie to let server  determine which account the user is trying to access</p>
+<p>In this case, an attacker could log in using their own credentials but then change the value of the account cookie to any arbitrary username when submitting the verification code.</p>
+<p>this is dangerous as they will be able to brute force any arbtrirary user </p>
+<h4>Brute forcing</h4>
+<p>you can try to brute force simple ones, 
+but there can be times when they log you out
+so for that , you got the macros , you just keep relogging and retrying </p>
+<h4>Why no basic auth</h4>
+<p>some browsers usually attempt https first </p>
+<p>firefox does not, if a http link is present, it will straight go to port 80 </p>
+<p>Why the fallback still lets a Basic-Auth leak happen
+User types example.com (or clicks a plain-HTTP link).</p>
+<p>Browser first attempts https://example.com/.</p>
+<p>Attacker interferes — blocks packets or serves an invalid cert.</p>
+<p>Browser’s auto-upgrade logic gives up and retries http://example.com/.</p>
+<p>Attacker replies with 401 Unauthorized WWW-Authenticate: Basic, harvests the credentials the moment the user (or the browser) resends the request with Authorization: Basic ….</p>
+<h3>READ SOME STUFF ON FORGET PASSWORD FLOWS , how do people forget to validate the token ? dafuq is that</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Store the token server-side</strong> (or sign it with an HMAC and verify).</td>
+<td>Prevents tampering or omission.</td>
+</tr>
+<tr>
+<td><strong>Bind token → user → request-IP/User-Agent</strong> and mark <em>single-use</em>.</td>
+<td>Stops replay or swapping usernames.</td>
+</tr>
+<tr>
+<td><strong>Short TTL</strong> (e.g., 10–15 min).</td>
+<td>Shrinks the brute-force window.</td>
+</tr>
+<tr>
+<td><strong>Enforce rate limits / lock-outs</strong> <strong>and</strong> alert unusual volumes.</td>
+<td>Makes enumeration impractical.</td>
+</tr>
+<tr>
+<td><strong>Send reset links only over HTTPS; set <code>SameSite=Lax</code> cookies.</strong></td>
+<td>Thwarts host-header poisoning and CSRF tricks.</td>
+</tr>
+<tr>
+<td><strong>Security review of every “make state-changing POST” endpoint.</strong></td>
+<td>Catches the “token-not-checked” bug before prod.</td>
+</tr>
+</tbody>
+</table>
+    </article>
+    
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 RasenRhino. No rights reserved </p>
+    </div>
+  </footer>
+</body>
+</html>

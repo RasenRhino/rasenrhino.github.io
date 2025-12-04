@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ridham's Blog</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">
+        <a href="/">Secure messaging – Me being nitpicky</a>
+      </h1>    
+        <nav class="site-nav">
+        
+          <a href="/">Home</a>
+        
+          <a href="/posts/">Posts</a>
+        
+          <a href="/thoughts/">Thoughts</a>
+        
+          <a href="/notes/">Notes</a>
+        
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <article class="post">
+      <p>Signal is a well-known secure messaging protocol, celebrated for its robust end-to-end encryption and straightforward trust model, usually relying on "Trust on First Use" (TOFU) for verifying the authenticity of user identity keys.</p>
+<p>Now... I have personally never seen anyone verify their identity keys using the QR codes feature. (If you do, congrats.)</p>
+<p>That implies the burden of detecting a MITM lies entirely on the client (the QR code you see in Signal).</p>
+<p>The question I try to explore here is: <strong>Are there any other checks for identity keys happening on the server?</strong></p>
+<p>I will try to consolidate my notes on the <a href="https://github.com/signalapp/Signal-Server">Signal Server</a> source code as I attempt to answer these questions and see if this is a problem I want to spend time solving.</p>
+<hr />
+<h3>Findings from Signal’s Test Suite</h3>
+<p>Going through the test suite in the Signal repo, particularly <a href="https://github.com/signalapp/Signal-Server/blob/6a1f01f876c44ac78132f558d5e5396154dc6ab0/integration-tests/src/test/java/org/signal/integration/MessagingTest.java#L1-L50">MessagingTest.java</a>, I conclude the following:</p>
+<ul>
+<li>The signature on the signed prekey is verified against the uploaded identity key.</li>
+<li>Bindings happen on the client end. Even if numbers like <code>+1 555 1234</code> and <code>+1 555 5678</code> publish the same identity key, the user’s app will bind that key to whichever number she picked, and that binding is locked on first use.</li>
+</ul>
+<p>I did go through some more bits, and the code did work according to the spec. Nothing out of the ordinary. </p>
+<p>But can't a server pretend to be Alice?</p>
+<p>Do we know that the code we are seeing is the one running on the server ?</p>
+<hr />
+<h3>Can the server be malicious?</h3>
+<p>In theory, yes—if you've never communicated with that phone number before, the server could hand you a fake identity-key bundle for that number and silently act as a MITM.</p>
+<hr />
+<h3>Can federated servers for messaging protocols be better?</h3>
+<p>I did think breifly that federation can be a good idea. But they do have their own challenges. </p>
+<p>Fingers point toward Matrix. But reviewing this <a href="https://www.cvedetails.com/vulnerability-list/vendor_id-2044/Matrix.html">CVE list</a> doesn’t exactly tip the scales in its favor.</p>
+<p>Matrix spreads metadata across all servers participating in a room, potentially thousands in large public rooms. Signal, on the other hand, keeps all routing data on a single backend (still subpoena-able, but not broadly broadcasted).</p>
+<p>Federation involves more trust than just putting code on GitHub (like Signal) and hoping the server is running the same code. I know I'm being nitpicky, but technically, the questioning is valid—you cannot fully trust the server without doing out-of-band verification.</p>
+<p>However, federation is about speaking the same protocol, not necessarily running the same binary (hence the CVEs and the naive thought process I mentioned).</p>
+<hr />
+<h3>Possible Solution?</h3>
+<p>It's my understanding these issues stem from community-based initiatives.</p>
+<p>For instance, take the case of Tor. It has its own issues (see <a href="https://www.atlasobscura.com/articles/found-nodes-in-an-anonymityprotecting-network-that-are-actually-spying-on-users">Artifact 1</a> and <a href="https://www.youtube.com/watch?v=cJWsJ47joAQ">Artifact 2</a>).</p>
+<p>My proposition: incentive-based initiatives. A very successful example is Bitcoin.</p>
+<p>Using PoW and incentives, we've developed mechanisms where we can trust servers processing our data.</p>
+<hr />
+<h3>But isn't it easier to do out-of-band verification?</h3>
+<p>Yes, it is. However, instead of verifying QR codes, it might be easier to integrate something that looks like a domain name (<code>rasenrhino.com</code>). But this approach relies on Certificate Authorities (CAs), and trusting a CA works—until it doesn't. (For more, see <a href="https://www.f5.com/labs/articles/threat-intelligence/kazakhstan-attempts-to-mitm-itscitizens">this</a>.)</p>
+<p>My proposition is a DNS-like system for identity keys built upon an on-chain mechanism. One example is ENS.</p>
+<hr />
+<h3>What is ENS?</h3>
+<p>Ethereum Name Service (ENS) is a decentralized naming protocol turning blockchain addresses like <code>0x742d35c...</code> into human-readable names such as <code>rasenrhino.eth</code>. ENS functions similarly to DNS but runs entirely on smart contracts instead of ICANN-controlled servers.</p>
+<p>It ideally simplifies user-verification but involves some significant costs.</p>
+<hr />
+<h3>Steps forward</h3>
+<p>I have been working on my own project to understand protocol design more intimately. Here's a chat application protocol I've recently worked on: <a href="https://github.com/RasenRhino/messenger_protocol">Messenger Protocol</a>.</p>
+<p>My next goal is to develop this into an <strong>on-chain verifiable communication mechanism</strong>.</p>
+<p>Some thoughts and reasoning:</p>
+<ul>
+<li>With Signal, we have endpoint privacy concerns. I'll need to investigate further.</li>
+<li>This could be a viable alternative to something like <code>DocuSign</code>. The pricing model might be more efficient on Solana, though such products require solid brand recognition.</li>
+<li>It could integrate decentralized arbitration mechanisms (see <a href="https://kleros.io/">Kleros</a>).</li>
+</ul>
+<p>To be continued...</p>
+    </article>
+    
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 RasenRhino. No rights reserved </p>
+    </div>
+  </footer>
+</body>
+</html>

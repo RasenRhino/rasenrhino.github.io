@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ridham's Blog</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">
+        <a href="/">Web3 supply chain attacks</a>
+      </h1>    
+        <nav class="site-nav">
+        
+          <a href="/">Home</a>
+        
+          <a href="/posts/">Posts</a>
+        
+          <a href="/thoughts/">Thoughts</a>
+        
+          <a href="/notes/">Notes</a>
+        
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <article class="post">
+      <p>The term “Web3 security” engages the much deserved spotlight on issues like re-entrancy
+loops, unchecked external calls, faulty business logic, but that myopic view can lead to
+ignorance towards the rest of the attack surface. It is important to understand that Web3
+applications (dApps, DeFi platforms, crypto exchanges, etc.) may run on decentralized
+protocols, but they still rely heavily on traditional Web2 infrastructure.</p>
+<p>There won’t be much content on colloquial phishing here, as there is already enough literature
+out there to desensitise you to it. Here I would like to put emphasis on the usual web2 flaws and
+how it fits within the web3 ecosystem. It’s worth noting that smart contract exploits accounted for
+roughly 53% of crypto losses in 2022 with the rest coming from the Web2/infrastructure issues.</p>
+<h2>Routing Woes</h2>
+<p>Case in point: Curve Finance (2022 &amp; 2025).</p>
+<p>A major DeFi protocol, which suffered DNS hijacking attacks multiple times , in 2022 and 2025 .
+The underlying smart contract logic was correct but users were directed to a fraudulent website
+hackers hijacked the “.fi” domain name system (DNS) of Curve Finance after managing to
+access the registrar. [Link]</p>
+<p>Didn’t they use DNSSEC ?</p>
+<p>Now Curve did use DNSSEC , the lack of registrar lock left them vulnerable . DNSSEC without
+registry lock won’t work if the registrar account is compromised. A registry lock is a manual,
+out-of-band unlock at the .fi registry . The point to be noted is that .fi offers it, but Curve hadn't
+enabled it.</p>
+<h2>Key Terms in beginner language</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Registry (The main authority for your entire TLD like .fi)</td>
+<td>It has the final say over which name servers and DNSSEC keys a domain should use.</td>
+</tr>
+<tr>
+<td>Registrar ( eg: GoDaddy , Namecheap)</td>
+<td>If attackers get into your registrar login, they can tell the registry to change critical settings.</td>
+</tr>
+<tr>
+<td>Registry Lock</td>
+<td>It prevents silent changes to name-server (NS) or DNSSEC (DS) records</td>
+</tr>
+</tbody>
+</table>
+<p>There was no Registry lock in the case of Curve finance.</p>
+<p>Now , it is not like the nameserver itself was compromised, that requires a deeper breach. It was
+the Registrar Login that was compromised. From there you can point to your own NS and
+that’s what happened in the case of Curve FInance.</p>
+<p>Fix : Enable Registry Lock.</p>
+<p>A registry-level lock (manual, out-of-band) stops NS/DS edits cold. .fi offers it; Curve never
+toggled it on. Hardware-token MFA at the registrar and real-time DS monitoring wouldn’t hurt
+either.</p>
+<h3>What is a Registry Lock</h3>
+<p>With the lock ON, any registrar request that touches the NS or DS field is automatically rejected.
+An out of band verification is required.</p>
+<p>Beyond DNS, there are lores of BGP (Border Gateway Protocol) being exploited to achieve
+similar results. [Link]</p>
+<p>This can be further extrapolated to highly likely and unwanted scenario. For instance ; supply
+chain attacks on validators or oracles (compromising the servers that feed data into
+blockchains) essentially merging network intrusion with on-chain attack.</p>
+<p>(should i add squarespace stuff<br />
+https://www.blockaid.io/blog/squarespace-defi-domain-hijack-incident<br />
+They had 2fa , but password was bad, so during migration from google domains to squarespace
+, 2fa was disabled , even on accounts that had 2fa enabled. Password spraying gave access to
+change the A records)</p>
+<h2>Subdomain Takeover</h2>
+<p>A subdomain takeover occurs when an attacker gains control over a subdomain of a target
+domain. [Link]</p>
+<p>Think this way, blog.example.com has a CNAME DNS record pointing to myblog.github.io.
+You deleted myblog.github.io. The DNS record still points there, but no GitHub Page exists at
+that name. An attacker can now claim myblog.github.io on their own GitHub account.</p>
+<p>One major example was the SSV Network Subdomain Takeover in 2023. [Link]</p>
+<p>The subdomain events.ssv.network was vulnerable due to an inactive Vercel instance. Attackers
+could:</p>
+<ul>
+<li>Register the orphaned subdomain on Vercel.</li>
+<li>Host fake dApps to trigger malicious wallet transactions.</li>
+<li>Distribute malware (e.g., Ssv-wallet.exe) or steal cookies for broader domain
+  compromise.</li>
+<li>This demonstrated how Web3 projects relying on Web2 services (e.g., Vercel, DNS) risk
+  asset theft and reputation damage from subdomain misconfigurations.</li>
+</ul>
+<p>Another example to make a case in point would be NFT cybersquatting. Just going through the
+abstract of this paper makes a strong argument for considering subdomain takeovers into
+account while mapping out the web3 attack surface..</p>
+<h2>DNS Zone Takeovers</h2>
+<p>These can be more dangerous than subdomain takeovers.</p>
+<p>The usual process for buying and utilising a domain is as follows:-</p>
+<ul>
+<li>You buy a domain from GoDaddy</li>
+<li>You create a zone file on Cloudflare</li>
+<li>But….</li>
+</ul>
+<p>You did not update the name server on GoDaddy to point to Cloudflare. Say, the domain
+example.com still points to ns.godaddy.com, not the Cloudflare nameserver, which looks
+something like ns1.cloudflare.com.</p>
+<p>Now, example.com expired, but your zone file exists, when an attacker buys example.com ,
+and tries to create a zone file on Cloudflare, it throws an error that there is a zone file that
+already exists, which is free for attacker to take over, and now he has all the configuration
+information of your domain.</p>
+<p>Effects of the attack?</p>
+<p>The effect is that knowledge of the subdomains is leaked, say, you used</p>
+<ul>
+<li>auth.example.com for OAuth callbacks</li>
+<li>api.example.com for your mobile app</li>
+</ul>
+<p>You forgot to delete the zone from Cloudflare.</p>
+<p>An attacker buys example.com and reattaches to your old Cloudflare zone.</p>
+<p>Now you can get all this data by digging hard enough ( look up crt.sh) , but what you cannot get
+is things like internal zone delegations, DNSSEC signatures. Going into the details of certificate
+pinning would be an overload of information at this point, but if you are interested, it is a prompt
+away</p>
+<p>“DNS Zone Takeover and Certificate Pinning”</p>
+<p>Note: HKPS is deprecated, and rarely do apps pin an entire certificate. They just pin public
+keys. After this , you are on your own on this topic of certificate pinning.</p>
+<p>It is not much different from the Curve Finance case we first discussed.</p>
+<p>One prominent example of this can be when researchers demonstrated how EtherMail's
+reliance on MX records for ENS identity verification could be spoofed. [Link] .</p>
+<p>All of this comes down to phishing attacks that are quite interesting to study.</p>
+<p>(Personal NOTES : add even tho they can copy everything from crt.sh and get subdomains,
+they cannot get Internal Zone Delegation , dnssec signatures, that they can only get from zone
+files)</p>
+<p>TLS pinning can help , but it is not widely used now , deprecated</p>
+<p>Certificate pinning might catch it , if entire certificate is not pinned, only public key is pinned
+which is what one would expect )</p>
+<h2>IMPORTANT NOTE :</h2>
+<p>People use DNS Host and Registrar interchangeably. Sometimes they can be the same, but
+essentially they are different things.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Registrar</td>
+<td>Place where you buy your domain from ( eg: GoDaddy )</td>
+</tr>
+<tr>
+<td>DNS Host</td>
+<td>The service that manages your DNS records (e.g., Cloudflare, Route53). DNS Host is the one that creates your Zone File, which gets put on the Nameserver</td>
+</tr>
+</tbody>
+</table>
+<h2>Packages</h2>
+<p>Package repository accounts (NPM, etc.) are compromised, and attackers could slip malicious
+code that executes during dApp startup or wallet installation. For instance, in 2023, researchers
+uncovered dozens of malicious NPM and PyPI packages that specifically targeted crypto
+developers or users , some aimed to steal wallet seeds or inject trojans if included in crypto
+apps. A few examples would be web3-utils-new, eth-tx-decoder2 etc.</p>
+<p>Has no one ever been guilty of blindly following an article, blog , comments on reddit and
+rawdog a “npm i “ command?</p>
+<p>[Link] [Link]</p>
+<h2>Solutions ?</h2>
+<p>The majority of strategies are community led, as they should be because they can yield
+maximum impact in the context of these problems.</p>
+<p>One such strategy is to mandate hardware-backed 2FA for all maintainer logins. Nearly every
+npm/PyPI takeover begins with an account phish or credential-stuffing hit; hardware keys break
+that chain. npm already forces 2FA for the top-impact packages and is phasing it in for everyone
+else</p>
+<p>Then comes your code-signing , integrity checks, yada yada. You know the drill.</p>
+<h2>Developer guidelines</h2>
+<p>Managing CI tokens with appropriate lifecycles and using a dedicated secrets manager like the
+one Github Action uses , blocking rogue curls are a few of the well documented practices
+developers can and should follow.</p>
+<h2>Bringing it together</h2>
+<p>None of this requires zero-knowledge proofs, AI auditors, or nine-figure budgets. Just basic
+hygiene that we should use in our standard SDLCs.</p>
+<p>Also,</p>
+<p>Web2 security can get a bit too opaque at times , and practice in web3 security does come with
+its own COMPARATIVE ease of execution in a few of contexts , like removing the “never halting”
+programs to some part in some places , better exhaustive formal verification methodologies
+which are relatively easily accessible, making the process relatively more deterministic. But it
+has its own pain points , things where you will have to make significant efforts.</p>
+<p>Point being, the domain is not a recluse for someone who is looking to make easy money, or
+quick convergence at results for that matter. Instant gratification of knowledge is never helpful ;
+a lesson that applies just as much to security as much to life in general.</p>
+<p>The understanding from all this is that each layer, from the blockchain protocol to the web UI,
+must be considered in threat modeling. Most of the attacks highlighted (from the Curve DNS
+hijack to any other phishing attack that are spammed on your twitter feed ) could have been
+prevented by applying well-known best practices: e.g. enabling registrar locks and DNSSEC,
+using 2FA and unique passwords, code-signing and integrity checks for front-end resources,
+network monitoring for BGP anomalies, and user education.</p>
+<p>Holistic approach to security cannot be ignored is the point of convergence of this article.</p>
+<p>:contentReference[oaicite:0]{index=0}</p>
+    </article>
+    
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 RasenRhino. No rights reserved </p>
+    </div>
+  </footer>
+</body>
+</html>

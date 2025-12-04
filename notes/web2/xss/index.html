@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ridham's Blog</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">
+        <a href="/">xss</a>
+      </h1>    
+        <nav class="site-nav">
+        
+          <a href="/">Home</a>
+        
+          <a href="/posts/">Posts</a>
+        
+          <a href="/thoughts/">Thoughts</a>
+        
+          <a href="/notes/">Notes</a>
+        
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <article class="post">
+      <h2>reflected xss</h2>
+<ul>
+<li>you send GET pwn </li>
+<li>Server returns <code>&lt;some-tag&gt; pwn &lt;/some-tag&gt;</code></li>
+</ul>
+<p>So what you can do is </p>
+<ul>
+<li>you send GET <code>&lt;script&gt; alert(1) &lt;/script&gt;</code></li>
+<li>server returns <code>&lt;some-tag&gt; &lt;script&gt; alert(1) &lt;/script&gt; &lt;/some=tag&gt;</code></li>
+</ul>
+<p>and you get a alert on the screen </p>
+<p>that is reflected XSS </p>
+<h2>stored XSS</h2>
+<p>it gets stores in a database and is shown to the user </p>
+<p>eg. chat window </p>
+<h2>DOM based XSS (happens entirely on the client side )</h2>
+<p>user gives some input -&gt; goes to innerhtml </p>
+<h2>Mutation XSS</h2>
+<p>READ MORE </p>
+<p>Say you put stuff, broswer doees something to it and it passes on as an input somewhere where it can be executed as a javascript 
+idk about this </p>
+<h3>Look into solving XSS and why it is not that simple</h3>
+<h2>HTTPonly stuff</h2>
+<p>If the cookie gives access to anything you care about—set it Secure; HttpOnly; SameSite, and never let front-end JavaScript touch it.</p>
+<p>it prevents it from being access by javascript document.getcookie</p>
+    </article>
+    
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 RasenRhino. No rights reserved </p>
+    </div>
+  </footer>
+</body>
+</html>
