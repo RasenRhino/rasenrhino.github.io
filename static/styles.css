@@ -208,6 +208,16 @@ strong, b {
   color: #ffffff;
 }
 
+/* Inherit heading color for bold text inside headings */
+h1 strong, h1 b,
+h2 strong, h2 b,
+h3 strong, h3 b,
+h4 strong, h4 b,
+h5 strong, h5 b,
+h6 strong, h6 b {
+  color: inherit;
+}
+
 .post ul, .post ol {
   margin-bottom: 1.5rem;
   padding-left: 1.25rem;
