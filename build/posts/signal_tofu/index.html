@@ -37,7 +37,7 @@
 <p>The question I try to explore here is: <strong>Are there any other checks for identity keys happening on the server?</strong></p>
 <p>I will try to consolidate my notes on the <a href="https://github.com/signalapp/Signal-Server">Signal Server</a> source code as I attempt to answer these questions and see if this is a problem I want to spend time solving.</p>
 <hr />
-<h3>Findings from Signal’s Test Suite</h3>
+<h2>Findings from Signal’s Test Suite</h2>
 <p>Going through the test suite in the Signal repo, particularly <a href="https://github.com/signalapp/Signal-Server/blob/6a1f01f876c44ac78132f558d5e5396154dc6ab0/integration-tests/src/test/java/org/signal/integration/MessagingTest.java#L1-L50">MessagingTest.java</a>, I conclude the following:</p>
 <ul>
 <li>The signature on the signed prekey is verified against the uploaded identity key.</li>

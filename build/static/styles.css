@@ -237,7 +237,7 @@ strong, b {
 .post hr {
   border: none;
   height: 1px;
-  background-color: var(--border);
+  background-color: #555555;
   margin: 2rem 0;
 }
 

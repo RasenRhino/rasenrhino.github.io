@@ -16,7 +16,7 @@ I will try to consolidate my notes on the [Signal Server](https://github.com/sig
 
 ---
 
-### Findings from Signal’s Test Suite
+## Findings from Signal’s Test Suite
 
 Going through the test suite in the Signal repo, particularly [MessagingTest.java](https://github.com/signalapp/Signal-Server/blob/6a1f01f876c44ac78132f558d5e5396154dc6ab0/integration-tests/src/test/java/org/signal/integration/MessagingTest.java#L1-L50), I conclude the following:
 
