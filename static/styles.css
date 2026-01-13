@@ -45,15 +45,15 @@ body {
 
 /* Links */
 a {
-  color: var(--text-primary);
+  color: #6ca0dc;
   text-decoration: none;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 a:hover {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  color: #8bb8e8;
+  border-bottom-color: #8bb8e8;
 }
 
 /* Container */
@@ -195,6 +195,12 @@ main.container {
 
 .post p:last-child {
   margin-bottom: 0;
+}
+
+/* Bold text - make it stand out */
+strong, b {
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .post ul, .post ol {
