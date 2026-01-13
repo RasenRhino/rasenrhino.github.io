@@ -45,15 +45,15 @@ body {
 
 /* Links */
 a {
-  color: #6ca0dc;
+  color: #a8d4ff;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 a:hover {
-  color: #8bb8e8;
-  border-bottom-color: #8bb8e8;
+  color: #c4e3ff;
+  border-bottom-color: #c4e3ff;
 }
 
 /* Container */
