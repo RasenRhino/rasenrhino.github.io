@@ -28,9 +28,8 @@ I'm **Ridham Bhagat**, a cybersecurity student at Northeastern University. My pr
 ---
 
 ### **Personal Interests**:  
-  - **Automotive Enthusiast**: Known for offering informal advice on car and motorcycle purchases. I enjoy exploring trails on weekends and going on long drives.  
+  - **Automotive Enthusiast**: Known for offering informal advice on car and motorcycle purchases. I enjoy exploring trails on weekends and going on long drives. 
   - **Music**: Appreciate genres such as metal/punk rock, J-Rock indie, and electronic music. And variations of them like techno classical or techno rock
-
 
 ---
 
@@ -50,7 +49,7 @@ I'm **Ridham Bhagat**, a cybersecurity student at Northeastern University. My pr
 - **[Thoughts](/thoughts/)**: I think about some stuff and this should be an outlet for that
 
 
-## I am looking for a job please. 
+### I am looking for a job , preferably in cybersecurity. 
 
 ### **Contact Information**
 Feel free to reach out to me via email at **bhagat.rid@northeastern.edu**.
