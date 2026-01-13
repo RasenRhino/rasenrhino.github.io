@@ -2,32 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Ridham's Blog</title>
-  <link rel="stylesheet" href="/static/styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ridham's personal blog — thoughts on security, technology, and beyond.">
+  <title>Mikrotek router — Ridham's Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
   <header class="site-header">
     <div class="container">
       <h1 class="site-title">
-        <a href="/">Mikrotek router</a>
-      </h1>    
-        <nav class="site-nav">
+        <a href="/">RasenRhino</a>
+      </h1>
+      <nav class="site-nav" aria-label="Main navigation">
         
-          <a href="/">Home</a>
+        <a href="/">Home</a>
         
-          <a href="/posts/">Posts</a>
+        <a href="/posts/">Posts</a>
         
-          <a href="/notes/">Notes</a>
+        <a href="/notes/">Notes</a>
         
-          <a href="/thoughts/">Thoughts</a>
+        <a href="/thoughts/">Thoughts</a>
         
       </nav>
     </div>
   </header>
+
   <main class="container">
     <article class="post">
-      <h5>Current IP address assigned to device</h5>
+      <p><code>/ping</code></p>
+<h5>Current IP address assigned to device</h5>
 <pre class="codehilite"><code>/ip address print
 </code></pre>
 
@@ -38,6 +43,23 @@
 <h5>Add and remove address</h5>
 <pre class="codehilite"><code>/ip address add address=172.20.182.1/16 interface=ether5
 /ip address remove #num
+</code></pre>
+
+<h5>User list</h5>
+<pre class="codehilite"><code>/user print
+</code></pre>
+
+<h5>user disable</h5>
+<pre class="codehilite"><code>/user disable [find where name=&quot;USERNAME&quot;]
+change it to enable to reenable
+</code></pre>
+
+<h5>create new user</h5>
+<pre class="codehilite"><code>/user add name=netadmin group=full password=StrongPass123
+</code></pre>
+
+<h5>Change user password - where command</h5>
+<pre class="codehilite"><code>/user set [find where name=&quot;USERNAME&quot;] password=NEWPASSWORD
 </code></pre>
 
 <h5>Check bridges</h5>
@@ -54,12 +76,17 @@ solition , use <code>/interface bridge filter</code> </p>
 <pre class="codehilite"><code>/ip firewall nat print
 </code></pre>
 
-<h3>hardening</h3>
+<h2>hardening</h2>
+<h4>list services</h4>
+<pre class="codehilite"><code>/ip service print
+</code></pre>
+
 <h4>trusted subnets</h4>
-<pre class="codehilite"><code>/ip service set winbox address=192.168.88.0/24  # Restrict to a trusted subnet
+<pre class="codehilite"><code>/ip service set winbox address=192.168.209.0/24  # Restrict to a trusted subnet
 /ip service disable telnet,ftp,api-ssl
 </code></pre>
 
+<p>/ip service set winbox address=192.168.209.0/24</p>
 <h3>do some pings</h3>
 <pre class="codehilite"><code>/tool fetch url=&quot;http://your-public-ip&quot; mode=http dst-path=response.txt keep-result=yes
 </code></pre>
@@ -73,11 +100,13 @@ sudo -l only tells your permissions
 check sudoers 
 dns server ssh not required, so disable them</p>
     </article>
+
     
   </main>
+
   <footer class="site-footer">
     <div class="container">
-      <p>&copy; 2025 My Cactus Dark Blog. All rights reserved.</p>
+      <p>&copy; 2026 RasenRhino. No rights reserved.</p>
     </div>
   </footer>
 </body>
