@@ -169,8 +169,6 @@ main.container {
   font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-  padding-bottom: 0.375rem;
-  border-bottom: 1px solid var(--border);
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.05em;
